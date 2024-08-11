@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 
-const TestCaseSchema = new mongoose.Schema({
+const testCaseSchema = new mongoose.Schema({
     input: {
-        type: Number | String,
+        type: String,
         required: true
     },
     expected_output: {
-        type: Number | String,
+        type: String,
         required: true
     }
 });
 
 
-const orderSchema = new mongoose.Schema(
+const problemSchema = new mongoose.Schema(
     {   id : {
             type : Number,
             required : true,
@@ -32,19 +32,9 @@ const orderSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-        // solved_examples: [SolvedExampleSchema],
-        // constraints: {
-        //     type: String,
-        //     required: true
-        // },
         boilerplate: String,
-        // datatype: {
-        //     type: String,
-        //     required: true,
-        //     enum: ['number', 'string']
-        // },
-        test_case_show: [TestCaseSchema],
-        test_case_hidden: [TestCaseSchema],
+        test_case_show: [testCaseSchema],
+        test_case_hidden: [testCaseSchema],
         difficulty: {
             type: String,
             default: 'Medium',
@@ -53,4 +43,4 @@ const orderSchema = new mongoose.Schema(
     } 
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("problems", problemSchema);

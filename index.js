@@ -1,7 +1,7 @@
 const express = require('express');
 const playgroundRoutes = require('./routes/playgroundRoutes');
 const arenaRoutes = require('./routes/arenaRoutes');
-// const connectDB = require('./db');
+const connectDB = require('./db');
 // const Product = require('./models/product')
 // const productRoutes = require('./routes/productRoutes');
 // const userRoutes = require('./routes/userRoutes');
@@ -22,7 +22,7 @@ app.use(cors());
 
 app.use(express.json());
 
-// connectDB();
+connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 

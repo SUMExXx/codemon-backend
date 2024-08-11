@@ -4,6 +4,7 @@ const ShortId = require('shortid')
 const axios = require('axios');
 const queue = require('../jobQueue')
 const problem = require('../problems/problem')
+const Problems = require('../models/problems')
 require('dotenv').config()
 
 // router.post('/executeCode', async (req, res) => {
@@ -100,11 +101,15 @@ require('dotenv').config()
 
 // setInterval(processQueue, 1000);
 
-router.post('/problem', (req, res) => {
+router.post('/problem', async (req, res) => {
 
-  // const problemId = req.bosy.problemId;
+  const problemId = req.body.id;
 
-  res.send(problem.problem);
+  await Problems.findOne({id: problemId}).then(async (problem) => {
+    res.send(problem);
+  })
+
+  // res.send(problem.problem)
 })
 
 router.post('/test', async (req, res) => {
@@ -181,5 +186,46 @@ router.post('/test', async (req, res) => {
   }
 
 })
+
+router.post('/create', async (req, res) => {
+    try {
+        const predefinedData = {
+            id: 1,
+            title: "Sum of Natural Numbers till n",
+            description: "<h1 class='text-2xl font-bold mb-4 text-gray-800'>Problem: Sum of Natural Numbers till n</h1><p class='text-gray-700 mb-4'>Given a positive integer <code class='bg-gray-100 p-1 rounded'>n</code>, write a function that calculates the sum of all natural numbers from <code class='bg-gray-100 p-1 rounded'>1</code> to <code class='bg-gray-100 p-1 rounded'>n</code>. A natural number is a positive integer greater than <code class='bg-gray-100 p-1 rounded'>0</code>.</p><p class='text-gray-700 mb-4'>The sum of the first <code class='bg-gray-100 p-1 rounded'>n</code> natural numbers can be computed using the following formula:</p><pre class='bg-gray-100 p-4 rounded-lg mb-4'><code class='text-gray-900'>Sum = n * (n + 1) / 2</code></pre><p class='text-gray-700 mb-4'>Implement the following function:</p><pre class='bg-gray-100 p-4 rounded-lg mb-4'><code class='text-gray-900'>function sumOfNaturalNumbers(n: number): number;</code></pre><p class='text-gray-700 mb-4'><strong>Input:</strong> A single integer <code class='bg-gray-100 p-1 rounded'>n</code> (1 ≤ <code class='bg-gray-100 p-1 rounded'>n</code> ≤ 10<sup>6</sup>), representing the upper limit of the natural numbers to sum.</p><p class='text-gray-700 mb-4'><strong>Output:</strong> A single integer representing the sum of all natural numbers from <code class='bg-gray-100 p-1 rounded'>1</code> to <code class='bg-gray-100 p-1 rounded'>n</code>.</p><p class='text-gray-700 mb-4'><strong>Example:</strong></p><pre class='bg-gray-100 p-4 rounded-lg mb-4'><code class='text-gray-900'>{`// Example 1\nconst result = sumOfNaturalNumbers(5);\nconsole.log(result); // Output: 15\n\n// Example 2\nconst result = sumOfNaturalNumbers(10);\nconsole.log(result); // Output: 55`}</code></pre><p class='text-gray-700 mb-4'><strong>Constraints:</strong> The input integer <code class='bg-gray-100 p-1 rounded'>n</code> is guaranteed to be a positive integer and does not exceed 10<sup>6</sup>.</p>",
+            boilerplate: "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\t// your code goes here\n\n}",
+            test_case_show: [
+                {
+                    input: "5",
+                    expected_output: "15"
+                },
+                {
+                    input: "10",
+                    expected_output: "55"
+                }
+            ],
+            test_case_hidden: [
+                {
+                    input: "100",
+                    expected_output: "5050"
+                },
+                {
+                    input: "1",
+                    expected_output: "1"
+                }
+            ],
+            difficulty: "Easy"
+        };
+
+        // Create a new problem instance with predefined data
+        const newProblem = new Problems(predefinedData);
+
+        // Save the problem to MongoDB
+        await newProblem.save();
+        res.status(201).json(newProblem);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 module.exports = router;
