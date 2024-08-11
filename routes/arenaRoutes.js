@@ -159,7 +159,7 @@ router.post('/test', async (req, res) => {
     var fullPass = true;
 
     testCaseShow.map((testcase) => {
-      if(testcase.input in result){
+      if(result != undefined && testcase.input in result){
         const userInput = result[testcase.input];
         if(userInput.output == testcase.expected_output){
           const time = parseInt(userInput.endTime) - parseInt(userInput.startTime)
