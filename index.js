@@ -1,5 +1,6 @@
 const express = require('express');
 const playgroundRoutes = require('./routes/playgroundRoutes');
+const arenaRoutes = require('./routes/arenaRoutes');
 // const connectDB = require('./db');
 // const Product = require('./models/product')
 // const productRoutes = require('./routes/productRoutes');
@@ -50,6 +51,8 @@ const port = process.env.PORT || 8080;
 // app.use('/users', userRoutes);
 
 app.use('/playground', playgroundRoutes);
+
+app.use('/arena', arenaRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
